@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FileModal from './FileModal';
 import { marketingProducts } from '../../api/useMarketingMaterial';
 import OrderLoader from '../loader';
-
+import {originAPi} from '../../lib/store'
 function Table() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state for table data
@@ -39,7 +39,7 @@ function Table() {
     setModalLoading(true); // Start loading for modal
     try {
       const response = await axios.post(
-        `https://www.uditchauhan.com/file/${contentVersionId}`,
+        `${originAPi}/marketing-material/file/${contentVersionId}`,
         {},
         { responseType: 'arraybuffer' } // Handle binary data
       );
@@ -69,6 +69,7 @@ function Table() {
       case 'jpg':
       case 'jpeg':
       case 'png':
+   
         return 'image/' + fileExtension.toLowerCase();
       case 'pdf':
         return 'application/pdf';
