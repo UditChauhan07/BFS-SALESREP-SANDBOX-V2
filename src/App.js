@@ -46,6 +46,7 @@ import Tier from "./reports/TierStanding";
 import HelpSection from "./pages/HelpSection";
 import AuditReport from "./reports/AuditReport/AuditReport";
 import MaterialMarketing from "./pages/MaterialMarketing";
+import CreditNote from "./components/CreditNote/CreditNote";
 function App() {
   // const Redirect = ({ href }) => {
   //   window.location.href = href;
@@ -117,12 +118,14 @@ function App() {
 
             {/* Marketing material */}
             <Route path="/marketing-material" element={<MaterialMarketing/>}/>    
-
+              {/* Credit note */}
+              <Route path="/credit-note" element={<CreditNote/>}/> 
             {/*  */}
+           
      
             <Route path="*" element={<PageNotFound />}></Route>
             
-            {/* 1234 */}
+           
           </Routes>
         </BrowserRouter>
       </BagProvider>

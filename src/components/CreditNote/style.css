@@ -1,0 +1,182 @@
+.main-hero-sec{
+    height: max-content;
+    width: 100%;
+    background-color: rgba(126, 126, 126, 0.082);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 30px;
+    border-radius: 10px;
+    border: 2px solid #08080808;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px;
+    
+    
+}
+.heading{
+    width: 100%;
+    text-align: center;
+}
+.form-check{
+    height: 70px;
+    width: 45%;
+    background-color: #fff;
+    border: 1px solid #08080842;
+    border-radius: 5px;
+    margin: 10px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    /* padding: 10px; */
+    position: relative;
+    
+    
+}
+
+.form-check-input{
+    position: absolute;
+    left: 10%;
+
+}
+.form-check-input:checked {
+    background-color: #000000; /* fill color */
+}
+.wallet{
+    position: absolute;
+    right: 7px;
+}
+.form-check-label{
+    position: absolute;
+    left: 15%
+}
+.available{
+    font-size: 10px;
+    color: #00000073;
+}
+/* .form-check-label{
+    align-items: center;
+    background-color: #fff;
+   
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    gap: 50px;
+} */
+.wallet{
+    color: green;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    padding: 0 0 5px;
+    text-align: end;
+}
+.btn{
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+    width: 90%;
+   
+}
+.btn-submit{
+    align-items: center;
+    border: 1px solid #000;
+    background-color: #000;
+    color: #fff!important;
+    display: flex;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 600;
+    height: 42px;
+    padding: 0 20px;
+    text-transform: uppercase;
+}
+.btn-cancel{
+    align-items: center;
+    border: 1px solid #000;
+    color: #000;
+    display: flex;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: 600;
+    height: 42px;
+    padding: 0 20px;
+    text-transform: uppercase;
+}
+/* customModalStyles.css */
+.custom-modal-size-cn {
+    max-width: max-content; 
+    height: max-content;   
+}
+
+.modal-content-cn {
+    max-height: max-content; 
+    overflow-y: auto;  
+}
+.modal-backdrop-cn{
+    opacity: 0.5 !important; 
+}
+.modal.show .modal-dialog-cn {
+    background-color: rgba(255, 255, 255, 0.9);
+}   
+.view-link{
+    
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    padding: 4px 13px;
+}
+.credit-note-table{
+    border: 2px dotted black;
+}
+.manufacturer-name-credit-note{
+    width: 70%;
+    text-transform: uppercase;
+   
+    
+}
+.manufacturer-name-credit-note h6{
+    font-family: Montserrat;
+    letter-spacing: 2px;
+}
+.credit-note-heading h4{
+    font-family: Montserrat;
+    letter-spacing: 2px;    
+}
+.credit-note-status{
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.credit-date{
+    color: #00000056
+}
+     
+.CreditNote_filterTransaction__2uRP9 {
+    align-items: center;
+    border: 1px dotted #000;
+    cursor: pointer;
+    display: flex;
+    padding: 10px;
+    width: 40%;
+    margin: 10px;
+}
+
+.CreditNote_inputMain__pHygv {
+    color: #646464;
+    font-family: Montserrat;
+    margin-left: 10px;
+    width: 100%;
+}
+.CreditNote_searchInput__paDPf {
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+}

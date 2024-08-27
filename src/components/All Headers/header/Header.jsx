@@ -40,6 +40,14 @@ const Header = () => {
             Customer Support
           </Link>
         </p>
+        {/* credit note  */}
+        <p className={`m-0  ${styles.text}`}>
+          <Link to="/credit-note" className="linkStyle">
+            Credit Note
+          </Link>
+        </p>
+
+        {/*  */}
         <p className={`m-0  ${styles.text}`}>
           <Link to="" className="linkStyle">
             <div className="dropdown dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">

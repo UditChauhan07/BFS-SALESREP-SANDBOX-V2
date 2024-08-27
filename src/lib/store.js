@@ -1,7 +1,7 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com/"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-// export const originAPi = "http://localhost:2619"
-export const originAPi = "https://bfs.uditchauhan.com"
+export const originAPi = "http://localhost:2619"
+// export const originAPi = "https://bfs.uditchauhan.com"
 
 let url = `${originAPi}/beauty/`;
 let URL = `${originAPi}/beauty/0DS68FOD7s`;

@@ -1,0 +1,77 @@
+.mm-table{
+    min-height: 60vh;
+    height: max-content;
+    border: 1px dotted #000;
+    padding: 10px;
+  
+
+}
+.mm-body tr td{
+    height: 30px;
+
+}
+.mm-head{
+    height: 40px;
+}
+.mb-1 button{
+    display: flex;
+    gap: 2px;
+}
+.modal-header .btn-close {
+    border: 2px solid;
+    border-radius: 50%;
+    padding: 10px; /* Adjust padding as needed */
+    margin-right: 20px; /* Adjust margin as needed for spacing */
+  }
+  .file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Space between boxes */
+    justify-content: center; /* Center the boxes */
+  }
+  
+  .file-box {
+    flex: 1 1 calc(50% - 16px); 
+    border: 1px dotted #00000083; 
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    margin-bottom: 16px;
+   
+    
+  }
+  
+  .file-box:hover {
+    transform: scale(1.05); /* Slightly enlarge box on hove */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+  }
+  /* Style for making the modal wider */
+  .wider-modal {
+    max-width: 60%; /* 90% of the viewport width */
+    width: auto; /* Makes the modal resize with the viewport */
+}
+  
+  .file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Space between boxes */
+    justify-content: center; /* Center the boxes */
+    
+   
+  }
+  
+
+ 
+  
+  .file-box:hover {
+    transform: scale(1.05); /* Slightly enlarge box on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  /* .custom-p-btn{
+    position: relative;
+  }
+  .custom-btn{
+    position: absolute;
+  
+  } */
