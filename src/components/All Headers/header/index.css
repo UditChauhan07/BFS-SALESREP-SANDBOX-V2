@@ -1,0 +1,16 @@
+@media screen and (max-width: 1130px) {
+  #main {
+    flex-wrap: wrap;
+  }
+  .text{
+    font-size: 10px !important;
+
+  }
+}
+@media screen and (max-width: 768px){
+  .text{
+    font-size: px !important;
+
+  }
+
+}
