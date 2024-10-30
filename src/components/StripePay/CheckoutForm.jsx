@@ -6,7 +6,7 @@ import { useBag } from '../../context/BagContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { orderListHandler } from './orderService';
-
+import { originAPi } from '../../lib/store';
 const CheckoutForm = ({ clientSecret, orderDes, PONumber, amount, uniqueId }) => {
     const stripe = useStripe();
     const elements = useElements();
@@ -107,7 +107,7 @@ const CheckoutForm = ({ clientSecret, orderDes, PONumber, amount, uniqueId }) =>
                             begToOrder.orderId = latestOrderId; // Add orderId to begToOrder
               
                             try {
-                                const backendResponse = await axios.post('http://localhost:2611/stripe/order/details', begToOrder, { timeout: 5000 });
+                                const backendResponse = await axios.post(`${originAPi}/stripe/order/details`, begToOrder, { timeout: 5000 });
                                 if (backendResponse.data.success) {
                                     productLists.forEach((ele) => addOrder(ele.product, 0, ele.discount));
                                     localStorage.removeItem("orders");
