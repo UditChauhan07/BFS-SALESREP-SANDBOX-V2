@@ -1,6 +1,6 @@
 // export const originAPi = process.env.REACT_APP_OA_URL || "https://temp.beautyfashionsales.com"
-// export const originAPi = "https://sandbox.beautyfashionsales.com"
-export const originAPi = "http://localhost:3001"
+export const originAPi = "https://sandbox.beautyfashionsales.com"
+// export const originAPi = "http://localhost:3001"
 export const salesRepIdKey = "BzQIEAjzCEHmlXc"; 
 let url = `${originAPi}/retailer/`;
 let url2 = `${originAPi}/retailerv2/`;
