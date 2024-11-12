@@ -1,6 +1,6 @@
-// export const originAPi = process.env.REACT_APP_OA_URL || "https://staging.beautyfashionsales.com"
+export const originAPi = process.env.REACT_APP_OA_URL || "https://staging.beautyfashionsales.com"
 // export const originAPi = "https://dev.beautyfashionsales.com"
-export const originAPi = "http://localhost:3001"
+// export const originAPi = "http://localhost:3001"
 
 let url = `${originAPi}/retailer/`;
 let url2 = `${originAPi}/retailerv2/`;
