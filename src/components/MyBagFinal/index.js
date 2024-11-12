@@ -50,20 +50,30 @@ function MyBagFinal() {
   const productLists = fetchBag?.items ?? [];
 
   const handlePaymentTypeChange = (value) => {
+    // Check if the keys are not null
+    if (intentRes?.brandDetails.Stripe_Secret_key_test__c || intentRes?.brandDetails.Stripe_Publishable_key_test__c) {
+        // Toggle the isPlayable state based on the checkbox
+        setIsPlayAble((prevIsPlayable) => (prevIsPlayable === 0 ? 1 : 0));
+    } else {
+        // If keys are null, reset isPlayable to 0
+        setIsPlayAble(0);
+    }
+
     // Toggle the payment type in the selectedPaymentTypes array
     setSelectedPaymentTypes((prevSelected) => {
-      if (prevSelected.includes(value)) {
-        // Remove if already selected
-        return prevSelected.filter((type) => type !== value);
-      } else {
-        // Add if not selected
-        return [...prevSelected, value];
-      }
+        if (prevSelected.includes(value)) {
+            // Remove if already selected
+            return prevSelected.filter((type) => type !== value);
+        } else {
+            // Add if not selected
+            return [...prevSelected, value];
+        }
     });
-  
+
     // Optional: Log the selected value for debugging
     console.log(value, "value");
-  };
+};
+
 
   const handleNameChange = (event) => {
     const limit = 20;
@@ -718,7 +728,7 @@ useEffect(()=>{
                       ) : null}
                        <div className={Styles.ShipBut}>
                        <button onClick={handleAccordian}>
-                         PAY AND PLACE ORDER
+                         PROCEED TO PAY
                         </button>
 
                        </div>
