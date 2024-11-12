@@ -23,7 +23,7 @@ function MyBagFinal() {
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
   const [alert, setAlert] = useState(0);
-  const [orderDesc, setOrderDesc] = useState(null);
+  const [orderDesc, setOrderDesc] = useState();
   const [PONumber, setPONumber] = useState();
   const [buttonActive, setButtonActive] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(0);
