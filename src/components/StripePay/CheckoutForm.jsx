@@ -14,7 +14,7 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [cardErrors, setCardErrors] = useState({});
     const { order, deleteOrder } = useCart();
-
+    const [orderDesc, setOrderDesc] = useState(null);
     const deleteBag = () => {
         deleteOrder().catch(err => console.error({ err }));
     };
@@ -111,7 +111,7 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes }) => {
                         Name: order?.Account?.name,
                         ManufacturerId__c: order?.Manufacturer?.id,
                         PONumber,
-                        desc: `${orderDes} `,
+                        desc: orderDesc,
                         SalesRepId: order.SalesRepId,
                         Type: orderType,
                         ShippingCity: order?.Account?.address?.city,

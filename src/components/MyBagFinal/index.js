@@ -23,7 +23,7 @@ function MyBagFinal() {
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
   const [alert, setAlert] = useState(0);
-  const [orderDesc, setOrderDesc] = useState();
+  const [orderDesc, setOrderDesc] = useState(null);
   const [PONumber, setPONumber] = useState();
   const [buttonActive, setButtonActive] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(0);
@@ -50,16 +50,19 @@ function MyBagFinal() {
   const productLists = fetchBag?.items ?? [];
 
   const handlePaymentTypeChange = (value) => {
-    setSelectedPaymentType(value);
-    console.log(value , "value")
-    setPaymentValue(value)
-
-    // Set isPlayAble to 0 if the selected payment type is not "Credit Card"
-    if (value !== "Credit Card") {
-      setIsPlayAble(0);
-    } else {
-      setIsPlayAble(1); // Reset to 1 if "Credit Card" is selected
-    }
+    // Toggle the payment type in the selectedPaymentTypes array
+    setSelectedPaymentTypes((prevSelected) => {
+      if (prevSelected.includes(value)) {
+        // Remove if already selected
+        return prevSelected.filter((type) => type !== value);
+      } else {
+        // Add if not selected
+        return [...prevSelected, value];
+      }
+    });
+  
+    // Optional: Log the selected value for debugging
+    console.log(value, "value");
   };
 
   const handleNameChange = (event) => {
@@ -80,7 +83,10 @@ const fetchBrandPaymentDetails = async () => {
       Id: id,
       AccountId : AccountID
     });
- 
+
+
+    setIntentRes(brandRes)
+    console.log("Brand Payment Details:", brandRes);
 
     // Check for null keys
     if (!brandRes?.brandDetails.Stripe_Secret_key_test__c || !brandRes?.brandDetails.Stripe_Publishable_key_test__c) {
@@ -111,8 +117,7 @@ const fetchBrandPaymentDetails = async () => {
       setIsPlayAble(0); 
     }
 
-    console.log("Brand Payment Details:", brandRes);
-    setIntentRes(brandRes)
+  
     console.log(intentRes , "intenseres")
     setPaymentDetails({
       PK_KEY: brandRes?.brandDetails.Stripe_Publishable_key_test__c,
@@ -304,6 +309,7 @@ useEffect(()=>{
   };
 
   const hasPaymentType = intentRes?.accountManufacturerData?.some(item => item.Payment_Type__c);
+  console.log("haspaymentres" ,intentRes )
 
   const deleteBag = () => {
     // localStorage.removeItem("AA0KfX2OoNJvz7x")
@@ -661,23 +667,24 @@ useEffect(()=>{
                           <p>No Shipping Address</p>
                         )}
                       </div>
-                      {isPlayAble === 1 && hasPaymentType ? (
+                      { hasPaymentType ? (
         <>
-          <p>Payment Type:</p>
+          
           {intentRes.accountManufacturerData.map((item) =>
-            item.Payment_Type__c ? (
-              <label key={item.Id}>
-                <input
-                  type="checkbox"
-                  name="paymentType"
-                  value={item.Payment_Type__c}
-                  checked={selectedPaymentTypes.includes(item.Payment_Type__c)}
-                  onChange={() => handlePaymentTypeChange(item.Payment_Type__c)}
-                />
-                {item.Payment_Type__c}
-              </label>
-            ) : null
-          )}
+  item.Payment_Type__c ? (
+    <label key={item.Id}>
+      Payment Type:  &nbsp;&nbsp;&nbsp;
+      <input
+        type="checkbox"
+        name="paymentType"
+        value={item.Payment_Type__c}
+        checked={selectedPaymentTypes.includes(item.Payment_Type__c)}
+        onChange={() => handlePaymentTypeChange(item.Payment_Type__c)}
+      />
+    &nbsp;  {item.Payment_Type__c}
+    </label>
+  ) : null
+)}
         </>
       ) : null}
                       <div className={Styles.ShipAdress2}>
@@ -731,7 +738,26 @@ useEffect(()=>{
                           <p>No Shipping Address</p>
                         )}
                       </div>
-
+                      { hasPaymentType ? (
+        <>
+        
+        {intentRes.accountManufacturerData.map((item) =>
+  item.Payment_Type__c ? (
+    <label key={item.Id}>
+      Payment Type:  &nbsp;&nbsp;&nbsp;
+      <input
+        type="checkbox"
+        name="paymentType"
+        value={item.Payment_Type__c}
+        checked={selectedPaymentTypes.includes(item.Payment_Type__c)}
+        onChange={() => handlePaymentTypeChange(item.Payment_Type__c)}
+      /> &nbsp;
+      {item.Payment_Type__c}
+    </label>
+  ) : null
+)}
+        </>
+      ) : null}
                       <div className={Styles.ShipAdress2}>
                         <textarea onKeyUp={(e) => { keyBasedUpdateCart({ Note: e.target.value }) }} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] ">{order?.Note}</textarea>
                       </div>
