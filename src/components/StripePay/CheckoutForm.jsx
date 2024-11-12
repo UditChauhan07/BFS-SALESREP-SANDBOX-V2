@@ -111,7 +111,7 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes }) => {
                         Name: order?.Account?.name,
                         ManufacturerId__c: order?.Manufacturer?.id,
                         PONumber,
-                        desc: `${orderDes}`,
+                        desc: `${orderDes} `,
                         SalesRepId: order.SalesRepId,
                         Type: orderType,
                         ShippingCity: order?.Account?.address?.city,
@@ -122,8 +122,8 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes }) => {
                         list: orderItems,
                         key: user.data.x_access_token,
                         shippingMethod: order.Account.shippingMethod,
-                        Payment_Status__c :  paymentStatus, 
-          Transaction_ID__c : paymentId
+                        Payment_Status__c : paymentStatus , 
+                        Transaction_ID__c : paymentId
                     };
 
                     const response = await OrderPlaced({ order: orderData, cartId: order.id });
