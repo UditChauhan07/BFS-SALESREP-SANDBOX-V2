@@ -14,9 +14,7 @@ import { useCart } from "../../context/CartContent";
 import { DeleteIcon } from "../../lib/svg";
 import CustomAccordion from "../CustomAccordian/CustomAccordain";
 import StripePay from "../StripePay";
-import Swal from "sweetalert2";
 import { originAPi } from "../../lib/store";
-import axios from "axios";
 function MyBagFinal() {
   let Img1 = "/assets/images/dummy.png";
   const { order, updateProductQty, removeProduct, deleteOrder, keyBasedUpdateCart, getOrderTotal } = useCart();
@@ -48,31 +46,22 @@ function MyBagFinal() {
   const [paymentValue , setPaymentValue] = useState()
   const fetchBag = fetchBeg({});
   const productLists = fetchBag?.items ?? [];
-
-  const handlePaymentTypeChange = (value) => {
-    // Check if the keys are not null
-    if (intentRes?.brandDetails.Stripe_Secret_key_test__c || intentRes?.brandDetails.Stripe_Publishable_key_test__c) {
-        // Toggle the isPlayable state based on the checkbox
-        setIsPlayAble((prevIsPlayable) => (prevIsPlayable === 0 ? 1 : 0));
-    } else {
-        // If keys are null, reset isPlayable to 0
-        setIsPlayAble(0);
+console.log(paymentDetails ,"payment details")
+  useEffect(() => {
+   
+    const nonCreditCardPaymentTypeExists = intentRes?.accountManufacturerData.some(
+      (item) => item.Payment_Type__c && item.Payment_Type__c !== null
+    );
+console.log(nonCreditCardPaymentTypeExists , "state nononpnonpnpn")
+    if (nonCreditCardPaymentTypeExists) {
+      setIsPlayAble(0); 
     }
-
-    // Toggle the payment type in the selectedPaymentTypes array
-    setSelectedPaymentTypes((prevSelected) => {
-        if (prevSelected.includes(value)) {
-            // Remove if already selected
-            return prevSelected.filter((type) => type !== value);
-        } else {
-            // Add if not selected
-            return [...prevSelected, value];
-        }
-    });
-
-    // Optional: Log the selected value for debugging
-    console.log(value, "value");
-};
+    else if( hasPaymentType?.brandDetails?.Stripe_Publishable_key_test__c &&nonCreditCardPaymentTypeExists === false
+    ){
+      setIsPlayAble(1)
+    }
+ 
+  }, [intentRes?.accountManufacturerData]);
 
 
   const handleNameChange = (event) => {
@@ -96,17 +85,18 @@ const fetchBrandPaymentDetails = async () => {
 
 
     setIntentRes(brandRes)
-    console.log("Brand Payment Details:", brandRes);
+
 
     // Check for null keys
     if (!brandRes?.brandDetails.Stripe_Secret_key_test__c || !brandRes?.brandDetails.Stripe_Publishable_key_test__c) {
-      setIsPlayAble(0); // Directly disable the payment options if keys are missing
+  setIsPlayAble(0)
       console.log("Brand payment details are missing, skipping payment processing.");
       return {
         PK_KEY: null,
         SK_KEY: null,
       };
     }
+   
 
     let paymentIntent = await fetch(`${originAPi}/stripe/payment-intent`, {
       method: "POST",
@@ -119,16 +109,17 @@ const fetchBrandPaymentDetails = async () => {
       }),
     });
     
-    if (paymentIntent.status === 200) {
+    if (paymentIntent.status === 200 && hasPaymentType?.accountManufacturerData[0].Payment_Type__c === null) {
       setIsPlayAble(1);
+    
     } else if (paymentIntent.status === 400) {
       
       setAlert(5); 
       setIsPlayAble(0); 
     }
 
-  
-    console.log(intentRes , "intenseres")
+  console.log(isPlayAble , "state res")
+
     setPaymentDetails({
       PK_KEY: brandRes?.brandDetails.Stripe_Publishable_key_test__c,
       SK_KEY: brandRes?.brandDetails.Stripe_Secret_key_test__c,
@@ -681,20 +672,12 @@ useEffect(()=>{
         <>
           
           {intentRes.accountManufacturerData.map((item) =>
-  item.Payment_Type__c ? (
-    <label key={item.Id}>
-      Payment Type:  &nbsp;&nbsp;&nbsp;
-      <input
-        type="checkbox"
-        name="paymentType"
-        value={item.Payment_Type__c}
-        checked={selectedPaymentTypes.includes(item.Payment_Type__c)}
-        onChange={() => handlePaymentTypeChange(item.Payment_Type__c)}
-      />
-    &nbsp;  {item.Payment_Type__c}
-    </label>
-  ) : null
-)}
+        item.Payment_Type__c ? (
+          <label key={item.Id}>
+            Payment Type: &nbsp;&nbsp;&nbsp; {item.Payment_Type__c}
+          </label>
+        ) : null
+      )}
         </>
       ) : null}
                       <div className={Styles.ShipAdress2}>
@@ -750,22 +733,14 @@ useEffect(()=>{
                       </div>
                       { hasPaymentType ? (
         <>
-        
-        {intentRes.accountManufacturerData.map((item) =>
-  item.Payment_Type__c ? (
-    <label key={item.Id}>
-      Payment Type:  &nbsp;&nbsp;&nbsp;
-      <input
-        type="checkbox"
-        name="paymentType"
-        value={item.Payment_Type__c}
-        checked={selectedPaymentTypes.includes(item.Payment_Type__c)}
-        onChange={() => handlePaymentTypeChange(item.Payment_Type__c)}
-      /> &nbsp;
-      {item.Payment_Type__c}
-    </label>
-  ) : null
-)}
+          
+          {intentRes.accountManufacturerData.map((item) =>
+        item.Payment_Type__c ? (
+          <label key={item.Id}>
+            Payment Type: &nbsp;&nbsp;&nbsp; {item.Payment_Type__c}
+          </label>
+        ) : null
+      )}
         </>
       ) : null}
                       <div className={Styles.ShipAdress2}>
