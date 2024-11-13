@@ -48,20 +48,26 @@ function MyBagFinal() {
   const productLists = fetchBag?.items ?? [];
 console.log(paymentDetails ,"payment details")
   useEffect(() => {
-   
+
+    
+    console.log(paymentDetails , "paymentdetails")
     const nonCreditCardPaymentTypeExists = intentRes?.accountManufacturerData.some(
       (item) => item.Payment_Type__c && item.Payment_Type__c !== null
     );
-console.log(nonCreditCardPaymentTypeExists , "state nononpnonpnpn")
+
     if (nonCreditCardPaymentTypeExists) {
       setIsPlayAble(0); 
     }
-    else if( hasPaymentType?.brandDetails?.Stripe_Publishable_key_test__c &&nonCreditCardPaymentTypeExists === false
+    else if(nonCreditCardPaymentTypeExists === false && paymentDetails.PK_KEY != null &&  paymentDetails.SK_KEY != null 
     ){
       setIsPlayAble(1)
     }
+    else if(nonCreditCardPaymentTypeExists === false && paymentDetails.PK_KEY === null &&  paymentDetails.SK_KEY === null 
+    ){
+      setIsPlayAble(0)
+    }
  
-  }, [intentRes?.accountManufacturerData]);
+  }, [intentRes?.accountManufacturerData , paymentDetails]);
 
 
   const handleNameChange = (event) => {
@@ -70,7 +76,7 @@ console.log(nonCreditCardPaymentTypeExists , "state nononpnonpnpn")
   };
 
 // 
-console.log("order" ,order)
+// console.log("order" ,order)
 const fetchBrandPaymentDetails = async () => {
   try {
     let id = localStorage.getItem("ManufacturerId__c");
@@ -118,7 +124,7 @@ const fetchBrandPaymentDetails = async () => {
       setIsPlayAble(0); 
     }
 
-  console.log(isPlayAble , "state res")
+  // console.log(isPlayAble , "state res")
 
     setPaymentDetails({
       PK_KEY: brandRes?.brandDetails.Stripe_Publishable_key_test__c,
@@ -283,7 +289,7 @@ useEffect(()=>{
             OrderPlaced({ order: begToOrder, cartId: order.id , paymentType : paymentValue })
               .then((response) => {
                 if (response) {
-                  console.log("response" , response.length)
+                  // console.log("response" , response.length)
                   if (response.error) {
                     setIsDisabled(false)
                     setIsOrderPlaced(0);
@@ -310,7 +316,7 @@ useEffect(()=>{
   };
 
   const hasPaymentType = intentRes?.accountManufacturerData?.some(item => item.Payment_Type__c);
-  console.log("haspaymentres" ,intentRes )
+  // console.log("haspaymentres" ,intentRes )
 
   const deleteBag = () => {
     // localStorage.removeItem("AA0KfX2OoNJvz7x")
