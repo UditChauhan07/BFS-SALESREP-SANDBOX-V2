@@ -821,7 +821,7 @@ useEffect(()=>{
 
                     {isPlayAble === 1 ? (
                         <CustomAccordion title="Payment Details" isOpen={paymentAccordian}>
-                          <StripePay description={orderDesc} PO_Number={PONumber} PK_KEY={paymentDetails.PK_KEY} SK_KEY={paymentDetails.SK_KEY} amount={total} order = {order} PONumber= {PONumber} orderDesc =  {orderDesc} />
+                          <StripePay description={order?.Note} PO_Number={PONumber} PK_KEY={paymentDetails.PK_KEY} SK_KEY={paymentDetails.SK_KEY} amount={total} order = {order} PONumber= {PONumber} orderDesc =  {orderDesc} />
                         </CustomAccordion>
                       ) : null}
 
