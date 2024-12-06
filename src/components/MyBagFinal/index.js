@@ -721,7 +721,7 @@ function MyBagFinal() {
                                     {intentRes?.brandDetails?.Stripe_Secret_key_test__c &&
                                     intentRes?.brandDetails?.Stripe_Publishable_key_test__c &&
                                     intentRes?.accountManufacturerData[0].Payment_Type__c === null ? (
-                                      <div style={{ opacity: "0.6" }} className={Styles.Mainbox5}>
+                                      <div style={{ opacity: "0.3" }} className={Styles.Mainbox5}>
                                        
                                         <QuantitySelector min={ele?.Min_Order_QTY__c || 0} value={ele.qty} />
                                       </div>
