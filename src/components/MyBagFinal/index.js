@@ -47,7 +47,8 @@ function MyBagFinal() {
   const [selectedPaymentType, setSelectedPaymentType] = useState(null);
   const [selectedPaymentTypes, setSelectedPaymentTypes] = useState([]);
   const [isAccordianOpen, setIsAccordianOpen] = useState(false);
-  const [paymentValue, setPaymentValue] = useState();
+  const [paymentValue, setPaymentValue] = useState(false);
+  const [ qunatityChange  , setQuantityChange] = useState()
   const fetchBag = fetchBeg({});
   console.log(paymentDetails, "payment details");
   useEffect(() => {
@@ -63,11 +64,13 @@ function MyBagFinal() {
     }
   }, [intentRes?.accountManufacturerData, paymentDetails]);
   const handleAccordian = () => {
+    setQuantityChange(true)
     setIsAccordianOpen(true);
     setDetailsAccordian(false);
     setPaymentAccordian(true);
   };
   const onToggle = () => {
+    setQuantityChange(false)
     if (detailsAccordian == true) {
       setDetailsAccordian(false);
       setPaymentAccordian(true);
@@ -570,7 +573,7 @@ function MyBagFinal() {
                         id="limit_input"
                         name="limit_input"
                         value={limitInput}
-                        onChange={handleNameChange}
+                        onChange={qunatityChange ? null : handleNameChange   }
                         onKeyPress={(e) => {
                           if (e.key === " ") {
                             e.preventDefault(); // Prevent space character from being entered
@@ -579,8 +582,8 @@ function MyBagFinal() {
                       />
                     )}
                   </h5>
-
-                  {!isPOEditable && (
+                  {qunatityChange ? null : <>
+                    {!isPOEditable && (
                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none" onClick={() => setIsPOEditable(true)} style={{ cursor: "pointer" }}>
                       <path
                         d="M19.3078 10.6932V19.2841C19.3078 19.6794 18.9753 20 18.5652 20H0.742642C0.332504 20 0 19.6794 0 19.2841V2.10217C0 1.70682 0.332504 1.38627 0.742642 1.38627H9.65389C10.064 1.38627 10.3965 1.70682 10.3965 2.10217C10.3965 2.49754 10.064 2.81809 9.65389 2.81809H1.48519V18.5682H17.8226V10.6932C17.8226 10.2979 18.1551 9.97731 18.5652 9.97731C18.9753 9.97731 19.3078 10.2979 19.3078 10.6932ZM17.9926 5.11422L15.6952 2.89943L7.72487 10.5832L7.09297 13.4072L10.0223 12.7981L17.9926 5.11422ZM21 2.2148L18.7027 0L16.8541 1.78215L19.1515 3.99692L21 2.2148Z"
@@ -588,6 +591,8 @@ function MyBagFinal() {
                       />
                     </svg>
                   )}
+                  </> }
+                  
                 </div>
               </div>
 
@@ -706,7 +711,23 @@ function MyBagFinal() {
                                   </div>
 
                                   <div className={Styles.Mainbox2M}>
-                                    <div
+                                  
+                                    {qunatityChange  ? (
+                                      <>
+                                        <div
+                                      className={Styles.Mainbox4}
+                                     style={{opacity:'0.3'}}
+                                    >
+                                      <DeleteIcon fill="red" />
+                                    </div>
+                                      <div style={{ opacity: "0.3" }} className={Styles.Mainbox5}>
+                                       
+                                        <QuantitySelector min={ele?.Min_Order_QTY__c || 0} value={ele.qty} />
+                                      </div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div
                                       className={Styles.Mainbox4}
                                       onClick={() => {
                                         if (order.items.length == 1) {
@@ -718,14 +739,6 @@ function MyBagFinal() {
                                     >
                                       <DeleteIcon fill="red" />
                                     </div>
-                                    {intentRes?.brandDetails?.Stripe_Secret_key_test__c &&
-                                    intentRes?.brandDetails?.Stripe_Publishable_key_test__c &&
-                                    intentRes?.accountManufacturerData[0].Payment_Type__c === null ? (
-                                      <div style={{ opacity: "0.3" }} className={Styles.Mainbox5}>
-                                       
-                                        <QuantitySelector min={ele?.Min_Order_QTY__c || 0} value={ele.qty} />
-                                      </div>
-                                    ) : (
                                       <div className={Styles.Mainbox5}>
                                         <QuantitySelector
                                           min={ele?.Min_Order_QTY__c || 0}
@@ -735,6 +748,8 @@ function MyBagFinal() {
                                           value={ele.qty}
                                         />
                                       </div>
+                                      </>
+                                      
                                     )}
                                   </div>
                                 </div>
