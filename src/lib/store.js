@@ -469,6 +469,7 @@ export async function OrderPlaced({ order, cartId }) {
   let orderinit = {
     info: order, cartId
   };
+  console.log({orderinit})
   let headersList = {
     "Content-Type": "application/json",
   };
