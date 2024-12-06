@@ -1,4 +1,3 @@
-/* eslint-disable no-lone-blocks */
 import React, { useEffect, useState } from "react";
 import Styles from "./Styles.module.css";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
@@ -10,6 +9,7 @@ import {
   ShareDrive,
   fetchBeg,
   getProductImageAll,
+  getBrandPaymentDetails
 } from "../../lib/store";
 import OrderLoader from "../loader";
 import ModalPage from "../Modal UI";
@@ -19,7 +19,9 @@ import ProductDetails from "../../pages/productDetails";
 import Loading from "../Loading";
 import { useCart } from "../../context/CartContent";
 import { DeleteIcon } from "../../lib/svg";
-
+import CustomAccordion from "../CustomAccordian/CustomAccordain";
+import StripePay from "../StripePay";
+import { originAPi } from "../../lib/store";
 function MyBagFinal() {
   let Img1 = "/assets/images/dummy.png";
   const {
@@ -30,6 +32,7 @@ function MyBagFinal() {
     keyBasedUpdateCart,
     getOrderTotal,
     fetchCart,
+    
   } = useCart();
   const navigate = useNavigate();
   const [total, setTotal] = useState(0);
@@ -41,6 +44,7 @@ function MyBagFinal() {
     status: false,
     message: "",
   });
+  const [orderDesc, setOrderDesc] = useState(null);
   const [isPOEditable, setIsPOEditable] = useState(false);
   const [PONumberFilled, setPONumberFilled] = useState(true);
   const [clearConfim, setClearConfim] = useState(false);
@@ -51,13 +55,112 @@ function MyBagFinal() {
   const [limitInput, setLimitInput] = useState(PONumber);
   const [isLoading, setIsLoading] = useState(true);
   const [limitCheck, setLimitCheck] = useState(false);
-
+  const [isPlayAble, setIsPlayAble] = useState(0);
+  const [paymentDetails, setPaymentDetails] = useState({ PK_KEY: null, SK_KEY: null, Amount: 0 });
+  const [detailsAccordian, setDetailsAccordian] = useState(true);
+  const [paymentAccordian, setPaymentAccordian] = useState(false);
+  const [intentRes , setIntentRes] = useState()
+  const [selectedPaymentType, setSelectedPaymentType] = useState(null);
+  const [selectedPaymentTypes, setSelectedPaymentTypes] = useState([]);
+  const [paymentValue , setPaymentValue] = useState()
   const fetchBag = fetchBeg({});
+  console.log(paymentDetails ,"payment details")
+  useEffect(() => {
+
+    
+    console.log(paymentDetails , "paymentdetails")
+    const nonCreditCardPaymentTypeExists = intentRes?.accountManufacturerData.some(
+      (item) => item.Payment_Type__c && item.Payment_Type__c !== null
+    );
+
+    if (nonCreditCardPaymentTypeExists) {
+      setIsPlayAble(0); 
+    }
+    else if(nonCreditCardPaymentTypeExists === false && paymentDetails.PK_KEY != null &&  paymentDetails.SK_KEY != null 
+    ){
+      setIsPlayAble(1)
+    }
+    else if(nonCreditCardPaymentTypeExists === false && paymentDetails.PK_KEY === null &&  paymentDetails.SK_KEY === null 
+    ){
+      setIsPlayAble(0)
+    }
+ 
+  }, [intentRes?.accountManufacturerData , paymentDetails]);
+  const handleAccordian = () => {
+    setDetailsAccordian(false);
+    setPaymentAccordian(true);
+  };
   const productLists = fetchBag?.items ?? [];
   const handleNameChange = (event) => {
     const limit = 20;
     setLimitInput(event.target.value.slice(0, limit));
   };
+  const fetchBrandPaymentDetails = async () => {
+    try {
+      let id = localStorage.getItem("ManufacturerId__c");
+      let AccountID = localStorage.getItem("AccountId__c");
+      const user = await GetAuthData();
+  
+      const brandRes = await getBrandPaymentDetails({
+        key: user.data.x_access_token,
+        Id: id,
+        AccountId : AccountID
+      });
+  
+  
+      setIntentRes(brandRes)
+  
+  
+      // Check for null keys
+      if (!brandRes?.brandDetails.Stripe_Secret_key_test__c || !brandRes?.brandDetails.Stripe_Publishable_key_test__c) {
+    setIsPlayAble(0)
+        console.log("Brand payment details are missing, skipping payment processing.");
+        return {
+          PK_KEY: null,
+          SK_KEY: null,
+        };
+      }
+     
+  
+      let paymentIntent = await fetch(`${originAPi}/stripe/payment-intent`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: "100",
+          paymentId: brandRes?.brandDetails.Stripe_Secret_key_test__c,
+        }),
+      });
+      
+      if (paymentIntent.status === 200 && hasPaymentType?.accountManufacturerData[0].Payment_Type__c === null) {
+        setIsPlayAble(1);
+      
+      } else if (paymentIntent.status === 400) {
+        
+        setAlert(5); 
+        setIsPlayAble(0); 
+      }
+  
+    // console.log(isPlayAble , "state res")
+  
+      setPaymentDetails({
+        PK_KEY: brandRes?.brandDetails.Stripe_Publishable_key_test__c,
+        SK_KEY: brandRes?.brandDetails.Stripe_Secret_key_test__c,
+      });
+      return {
+        PK_KEY: brandRes?.brandDetails.Stripe_Publishable_key_test__c,
+        SK_KEY: brandRes?.brandDetails.Stripe_Secret_key_test__c,
+      };
+    } catch (error) {
+      console.log("Error fetching brand payment details:", error);
+      return null;
+    }
+  };
+  useEffect(()=>{
+    fetchBrandPaymentDetails()
+  } , [])
+  const hasPaymentType = intentRes?.accountManufacturerData?.some(item => item.Payment_Type__c);
 
   useEffect(() => {
     setTotal(getOrderTotal() ?? 0);
@@ -733,7 +836,7 @@ function MyBagFinal() {
                                     >
                                       <DeleteIcon fill="red" />
                                     </div>
-                                    <div className={Styles.Mainbox5}>
+                                    {intentRes ?  null:                                      <div className={Styles.Mainbox5}>
                                       <QuantitySelector
                                         min={ele?.Min_Order_QTY__c || 0}
                                         onChange={(quantity) => {
@@ -741,7 +844,8 @@ function MyBagFinal() {
                                         }}
                                         value={ele.qty}
                                       />
-                                    </div>
+                                    </div> }
+
                                   </div>
                                 </div>
                               );
@@ -770,37 +874,33 @@ function MyBagFinal() {
                   </div>
 
                   <div className="col-lg-5 col-md-4 col-sm-12">
-                    <div className={Styles.ShippControl}>
-                      <h2>Shipping Address</h2>
-
-                      <div className={Styles.ShipAdress}>
+                    {isPlayAble ===1 ? <CustomAccordion  title="Shipping Address" isOpen={detailsAccordian}>
+                    <div className={Styles.ShipAdress}>
                         {buttonActive ? (
                           <p>
-                            {order?.Account?.address?.street},{" "}
-                            {order?.Account?.address?.city} <br />
-                            {order?.Account?.address?.state},{" "}
-                            {order?.Account?.address?.country}{" "}
-                            {order?.Account?.address?.postalCode}
+                            {order?.Account?.address?.street}, {order?.Account?.address?.city} <br />
+                            {order?.Account?.address?.state}, {order?.Account?.address?.country} {order?.Account?.address?.postalCode}
                             <br />
-                            {order?.Account?.address?.email}{" "}
-                            {order?.Account?.address?.contact &&
-                              `{ |  ${order?.Account?.address?.contact}}`}
+                            {order?.Account?.address?.email} {order?.Account?.address?.contact && `{ |  ${order?.Account?.address?.contact}}`}
                           </p>
                         ) : (
                           <p>No Shipping Address</p>
                         )}
                       </div>
-
+                      { hasPaymentType ? (
+        <>
+          
+          {intentRes.accountManufacturerData.map((item) =>
+        item.Payment_Type__c ? (
+          <label key={item.Id}>
+            Payment Type: &nbsp;&nbsp;&nbsp; {item.Payment_Type__c}
+          </label>
+        ) : null
+      )}
+        </>
+      ) : null}
                       <div className={Styles.ShipAdress2}>
-                        <textarea
-                          onKeyUp={(e) => {
-                            keyBasedUpdateCart({ Note: e.target.value });
-                          }}
-                          placeholder="NOTE"
-                          className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] "
-                        >
-                          {order?.Note}
-                        </textarea>
+                        <textarea onKeyUp={(e) => { keyBasedUpdateCart({ Note: e.target.value }) }} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] ">{order?.Note}</textarea>
                       </div>
                       {!PONumberFilled ? (
                         <ModalPage
@@ -808,15 +908,71 @@ function MyBagFinal() {
                           content={
                             <>
                               <div style={{ maxWidth: "309px" }}>
-                                <h1
-                                  className={`fs-5 ${StylesModal.ModalHeader}`}
-                                >
-                                  Warning
-                                </h1>
-                                <p className={` ${StylesModal.ModalContent}`}>
-                                  {" "}
-                                  Please Enter PO Number
-                                </p>
+                                <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Warning</h1>
+                                <p className={` ${StylesModal.ModalContent}`}> Please Enter PO Number</p>
+                                <div className="d-flex justify-content-center">
+                                  <button
+                                    className={`${StylesModal.modalButton}`}
+                                    onClick={() => {
+                                      setPONumberFilled(true);
+                                    }}
+                                  >
+                                    OK
+                                  </button>
+                                </div>
+                              </div>
+                            </>
+                          }
+                          onClose={() => {
+                            setPONumberFilled(true);
+                          }}
+                        />
+                      ) : null}
+                       <div className={Styles.ShipBut}>
+                       <button onClick={handleAccordian}>
+                         PROCEED TO PAY
+                        </button>
+
+                       </div>
+                    
+                       </CustomAccordion> :  <div className={Styles.ShippControl}>
+                      <h2>Shipping Address</h2>
+
+                      <div className={Styles.ShipAdress}>
+                        {buttonActive ? (
+                          <p>
+                            {order?.Account?.address?.street}, {order?.Account?.address?.city} <br />
+                            {order?.Account?.address?.state}, {order?.Account?.address?.country} {order?.Account?.address?.postalCode}
+                            <br />
+                            {order?.Account?.address?.email} {order?.Account?.address?.contact && `{ |  ${order?.Account?.address?.contact}}`}
+                          </p>
+                        ) : (
+                          <p>No Shipping Address</p>
+                        )}
+                      </div>
+                      { hasPaymentType ? (
+        <>
+          
+          {intentRes.accountManufacturerData.map((item) =>
+        item.Payment_Type__c ? (
+          <label key={item.Id}>
+            Payment Type: &nbsp;&nbsp;&nbsp; {item.Payment_Type__c}
+          </label>
+        ) : null
+      )}
+        </>
+      ) : null}
+                      <div className={Styles.ShipAdress2}>
+                        <textarea onKeyUp={(e) => { keyBasedUpdateCart({ Note: e.target.value }) }} placeholder="NOTE" className="placeholder:font-[Arial-500] text-[14px] tracking-[1.12px] ">{order?.Note}</textarea>
+                      </div>
+                      {!PONumberFilled ? (
+                        <ModalPage
+                          open
+                          content={
+                            <>
+                              <div style={{ maxWidth: "309px" }}>
+                                <h1 className={`fs-5 ${StylesModal.ModalHeader}`}>Warning</h1>
+                                <p className={` ${StylesModal.ModalContent}`}> Please Enter PO Number</p>
                                 <div className="d-flex justify-content-center">
                                   <button
                                     className={`${StylesModal.modalButton}`}
@@ -841,12 +997,9 @@ function MyBagFinal() {
                             if (order?.items?.length) {
                               if (PONumber.length) {
                                 if (order?.items?.length > 100) {
-                                  setLimitCheck(true);
+                                  setLimitCheck(true)
                                 } else {
-                                  if (
-                                    order.Account.discount.MinOrderAmount >
-                                    total
-                                  ) {
+                                  if (order.Account.discount.MinOrderAmount > total) {
                                     setAlert(1);
                                   } else {
                                     // if (testerInBag && order.Account.discount.testerproductLimit > total) {
@@ -858,6 +1011,7 @@ function MyBagFinal() {
                                 }
                               } else {
                                 setPONumberFilled(false);
+
                               }
                             }
                           }}
@@ -865,21 +1019,37 @@ function MyBagFinal() {
                         >
                           ${Number(total).toFixed(2)} PLACE ORDER
                         </button>
-                        <p
-                          className={`${Styles.ClearBag}`}
-                          style={{ textAlign: "center", cursor: "pointer" }}
+                        <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }}
                           onClick={() => {
                             if (buttonActive) {
-                              setClearConfim(true);
+                              setClearConfim(true)
                             }
-                          }}
+                          }
+                          }
                           disabled={!buttonActive}
-                        >
-                          Clear Bag
-                        </p>
+                        >Clear Bag</p>
                         {/* {Number(total) ? null : window.location.reload()} */}
                       </div>
-                    </div>
+                    </div>}
+
+                    {isPlayAble === 1 ? (
+                        <CustomAccordion title="Payment Details" isOpen={paymentAccordian}>
+                          <StripePay description={order?.Note} PO_Number={PONumber} PK_KEY={paymentDetails.PK_KEY} SK_KEY={paymentDetails.SK_KEY} amount={total} order = {order} PONumber= {PONumber} orderDesc =  {orderDesc} />
+                        </CustomAccordion>
+                      ) : null}
+
+
+      {isPlayAble==1 ? 
+       <p className={`${Styles.ClearBag}`} style={{ textAlign: 'center', cursor: 'pointer' }}
+                          onClick={() => {
+                            if (buttonActive) {
+                              setClearConfim(true)
+                            }
+                          }
+                          }
+                          disabled={!buttonActive}
+                        >Clear Bag</p>
+      : null}
                   </div>
                 </div>
               </div>
@@ -887,6 +1057,7 @@ function MyBagFinal() {
           </div>
         </section>
       )}
+      
       <ProductDetails
         productId={productDetailId}
         setProductDetailId={setProductDetailId}
