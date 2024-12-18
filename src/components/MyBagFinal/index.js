@@ -66,7 +66,7 @@ function MyBagFinal() {
     console.log(paymentDetails, "paymentdetails");
     const nonCreditCardPaymentTypeExists = intentRes?.accountManufacturerData?.some((item) => item.Payment_Type__c && item.Payment_Type__c !== null);
 
-    if (nonCreditCardPaymentTypeExists) {
+    if (nonCreditCardPaymentTypeExists && !intentRes) {
       setIsPlayAble(0);
     } else if (nonCreditCardPaymentTypeExists === false && paymentDetails.PK_KEY != null && paymentDetails.SK_KEY != null) {
       // setIsPlayAble(1);
@@ -393,6 +393,15 @@ function MyBagFinal() {
       alert("no sales rep.");
     }
   };
+
+
+
+  const handleRadioChange = (value) => {
+    setIsPlayAble(value); 
+  };
+
+
+
 
   const deleteBag = () => {
     // localStorage.removeItem("AA0KfX2OoNJvz7x")
@@ -921,9 +930,40 @@ function MyBagFinal() {
                             <p>No Shipping Address</p>
                           )}
                         </div>
-                        {hasPaymentType ? (
+                        {hasPaymentType  && intentRes?.brandDetails.Stripe_Secret_key_test__c ||
+        intentRes?.brandDetails.Stripe_Publishable_key_test__c  ? (
                           <>{intentRes.accountManufacturerData.map((item) => (item.Payment_Type__c ?
-                            <div classNama={Styles.PaymentType}> <label key={item.Id}>Payment Type: &nbsp; {item.Payment_Type__c}</label></div> : null))}</>
+                            <div classNama={Styles.PaymentType}> <label key={item.Id}>Payment Type:   
+                            
+        <div className="flex flex-col space-y-4 p-4 border border-gray-300 rounded-lg shadow-sm">
+          {/* Radio button for "Pay Now" */}
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              name="paymentOption"
+              value="paynow"
+              checked={isPlayAble === 1} // Check if state is 1
+              onChange={() => handleRadioChange(1)} // Set state to 1
+              className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+            />
+            <span className="text-gray-800 font-medium">Pay Now</span>
+          </label>
+
+          {/* Radio button for "Payment_Type__c" */}
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              name="paymentOption"
+              value="payment_type"
+              checked={isPlayAble === 0} // Check if state is 0
+              onChange={() => handleRadioChange(0)} // Set state to 0
+              className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+            />
+            <span className="text-gray-800 font-medium">{item.Payment_Type__c}</span>
+          </label>
+        </div>
+     
+       </label></div> : null))}</>
                         ) : null}
                         {orderShipment.length > 0 ?
                           <div className={Styles.PaymentType}>
@@ -988,8 +1028,40 @@ function MyBagFinal() {
                             <p>No Shipping Address</p>
                           )}
                         </div>
-                        {hasPaymentType ? (
-                          <div className={Styles.PaymentType}>{intentRes.accountManufacturerData.map((item) => (item.Payment_Type__c ? <label key={item.Id}> <span> Payment Type :</span>  {item.Payment_Type__c}</label> : null))}</div>
+                        {hasPaymentType  && intentRes?.brandDetails.Stripe_Secret_key_test__c ||
+        intentRes?.brandDetails.Stripe_Publishable_key_test__c  ? (
+                          <>{intentRes.accountManufacturerData.map((item) => (item.Payment_Type__c ?
+                            <div classNama={Styles.PaymentType}> <label key={item.Id}>Payment Type:   
+                            
+        <div className="flex flex-col space-y-4 p-4 border border-gray-300 rounded-lg shadow-sm">
+          {/* Radio button for "Pay Now" */}
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              name="paymentOption"
+              value="paynow"
+              checked={isPlayAble === 1} // Check if state is 1
+              onChange={() => handleRadioChange(1)} // Set state to 1
+              className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+            />
+            <span className="text-gray-800 font-medium">Pay Now</span>
+          </label>
+
+          {/* Radio button for "Payment_Type__c" */}
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              name="paymentOption"
+              value="payment_type"
+              checked={isPlayAble === 0} // Check if state is 0
+              onChange={() => handleRadioChange(0)} // Set state to 0
+              className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+            />
+            <span className="text-gray-800 font-medium">{item.Payment_Type__c}</span>
+          </label>
+        </div>
+     
+       </label></div> : null))}</>
                         ) : null}
                         {orderShipment.length > 0 ?
                           <div className={Styles.ShipAdress}>
