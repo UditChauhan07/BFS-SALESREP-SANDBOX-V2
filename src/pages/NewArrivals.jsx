@@ -19,6 +19,7 @@ const NewArrivals = () => {
   const [accountDiscount, setAccountDiscount] = useState();
   const [month, setMonth] = useState("");
   const [selectYear, setSelectYear] = useState(date.getFullYear())
+    const [currentPage, setCurrentPage] = useState(1);
   let yearList = [
     { value: date.getFullYear(), label: date.getFullYear() },
     { value: date.getFullYear() + 1, label: date.getFullYear() + 1 }
@@ -176,7 +177,7 @@ const NewArrivals = () => {
             name="Year"
             value={selectYear}
             options={yearList}
-            onChange={(value) => setSelectYear(value)}
+            onChange={(value) => {setCurrentPage(1);setSelectYear(value);}}
           />
           <FilterItem
             minWidth="220px"
@@ -192,6 +193,7 @@ const NewArrivals = () => {
                 : []
             }
             onChange={(value) => {
+              setCurrentPage(1);
               setSelectBrand(value);
             }}
           />
@@ -202,6 +204,7 @@ const NewArrivals = () => {
             value={month}
             options={months}
             onChange={(value) => {
+              setCurrentPage(1);
               setFilterLoad(true)
               let newArrivalsSection = document.getElementById("newArrivalsSection")
 
@@ -237,7 +240,7 @@ const NewArrivals = () => {
       }
     >
       {isLoaded ? (
-        <NewArrivalsPage selectBrand={selectBrand} brand={brand} isEmpty={isEmpty} isLoaded={filterLoad} month={month} productList={productList} accountDetails={accountDiscount} />
+        <NewArrivalsPage selectBrand={selectBrand} brand={brand} isEmpty={isEmpty} isLoaded={filterLoad} month={month} productList={productList} accountDetails={accountDiscount} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
       ) : (
         <LoaderV3 text={"Unveiling Upcoming New Products are loading...."} />
       )}

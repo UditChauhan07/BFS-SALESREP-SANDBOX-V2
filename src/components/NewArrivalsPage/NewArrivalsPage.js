@@ -14,7 +14,7 @@ import Select from "react-select";
 import { useCart } from "../../context/CartContent";
 import { DeleteIcon } from "../../lib/svg";
 import QuantitySelector from "../BrandDetails/Accordion/QuantitySelector";
-function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to = null, accountDetails }) {
+function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to = null, accountDetails,currentPage,setCurrentPage }) {
   const { updateProductQty, addOrder, removeProduct, isProductCarted } = useCart();
   const navigate = useNavigate();
   const [productDetailId, setProductDetailId] = useState();
@@ -28,8 +28,6 @@ function NewArrivalsPage({ productList, selectBrand, brand, month, isLoaded, to 
   const [accountList, setAccountList] = useState([]);
   const [accountSelectCheck, setAccountSelectCheck] = useState(false)
   const [replaceCartProduct, setReplaceCartProduct] = useState({});
-
-  const [currentPage, setCurrentPage] = useState(1);
   const [filterData, setFilterData] = useState([]);
   let PageSize = 10;
   const [pagination, setpagination] = useState([]);
