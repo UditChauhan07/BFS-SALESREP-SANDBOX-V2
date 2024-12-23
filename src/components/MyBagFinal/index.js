@@ -55,7 +55,7 @@ function MyBagFinal() {
   const [paymentType, setPaymentType] = useState();
   const [orderShipment, setOrderShipment] = useState([]);
   const [isSelect, setIsSelect] = useState(false);
-  const [greenStatus , setGreenStatus] = useState()
+  const [greenStatus, setGreenStatus] = useState()
 
   useEffect(() => {
     if (order?.Account?.id && order?.Manufacturer?.id && order?.items?.length > 0) {
@@ -67,6 +67,22 @@ function MyBagFinal() {
       setIsPlayAble(0);
     }
   }, [paymentDetails]);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        setQuantityChange(false)
+        setIsAccordianOpen(false);
+        setDetailsAccordian(true);
+        setPaymentAccordian(false);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
   const handleAccordian = () => {
 
     if (order?.items?.length) {
@@ -155,7 +171,7 @@ function MyBagFinal() {
         }),
       });
 
-setGreenStatus(paymentIntent.status)
+      setGreenStatus(paymentIntent.status)
       if (paymentIntent.status === 200) {
         setIsPlayAble(1);
       } else if (paymentIntent.status === 400) {
@@ -960,7 +976,7 @@ setGreenStatus(paymentIntent.status)
                             <p>No Shipping Address</p>
                           )}
                         </div>
-                        {(hasPaymentType && paymentDetails.PK_KEY != null && paymentDetails.SK_KEY != null && total>0 && greenStatus === 200) ? (
+                        {(hasPaymentType && paymentDetails.PK_KEY != null && paymentDetails.SK_KEY != null && total > 0 && greenStatus === 200) ? (
                           <div className={Styles.PaymentType}>
                             <label className={Styles.shipLabelHolder}>Payment Type:</label>
                             <div className={Styles.PaymentTypeHolder}>
@@ -1042,7 +1058,7 @@ setGreenStatus(paymentIntent.status)
                             <p>No Shipping Address</p>
                           )}
                         </div>
-                        {(hasPaymentType && paymentDetails.PK_KEY != null && paymentDetails.SK_KEY != null && total>0 && greenStatus === 200) ? (
+                        {(hasPaymentType && paymentDetails.PK_KEY != null && paymentDetails.SK_KEY != null && total > 0 && greenStatus === 200) ? (
                           <div className={Styles.PaymentType}>
                             <label className={Styles.shipLabelHolder}>Payment Type:</label>
                             <div className={Styles.PaymentTypeHolder}>
