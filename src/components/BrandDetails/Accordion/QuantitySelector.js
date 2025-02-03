@@ -10,12 +10,14 @@ const QuantitySelector = ({ onChange, value = 0, min = 0 }) => {
   const [qtyErrorModalOpen, setQtyErrorModalOpen] = useState(false);
   const [newQtyInput, setNewQtyInput] = useState(value);
   const [limitInput, setLimitInput] = useState("");
+  const [minQty , setMinQty] = useState()
   useEffect(() => {
     if (value !== 0 && value < min) {
       onChange?.(min);
     }
   }, [value, min,newQtyInput]);
   const qtyChangeHandler = ({ previous, newQty = 0 }) => {
+    setMinQty(min)
     if (newQty) {
       if (newQty < min) {
         setNewQtyInput(null)
@@ -53,7 +55,7 @@ const QuantitySelector = ({ onChange, value = 0, min = 0 }) => {
             <div className="d-flex flex-column gap-3">
               <h2 className={`${Styles.warning} `}>Warning</h2>
               <p className={`${Styles.warningContent} `}>
-              Please add quantities in multiples of three to proceed with adding products to your cart.
+              Please add quantities in multiples of {minQty} to proceed with adding products to your cart.
                 <p className="mt-4">
                   <input type="number" className={`${Styles.customPriceInput} ms-1`} onKeyUp={(e) => customHandler(e.target.value || 0)} maxLength={5} max={5}
                     id="limit_input"

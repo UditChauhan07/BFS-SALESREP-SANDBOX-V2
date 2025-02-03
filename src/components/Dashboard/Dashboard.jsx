@@ -390,6 +390,7 @@ function Dashboard() {
                       const result = t.reduce((a, b) => a + b, 0);
                       return result;
                       // return result < 1000 ? result.toFixed(1) : `${(result / 1000).toFixed(1)}K`;
+                      
                     },
                   },
                 },
@@ -414,6 +415,7 @@ function Dashboard() {
         },
       });
     }
+    
     if (dashboard?.yearlyManufacturerData) {
       let monthlyDataKey = Object.keys(dashboard.yearlyManufacturerData)
       let temp = [];
@@ -512,7 +514,7 @@ function Dashboard() {
     //   total += v.value;
     // });
     let ang = 180 - ((value / 100) * 180);
-    console.log({ value });
+    // console.log({ value });
     // if (value == 0) {
     //   ang = 180;
     // }
@@ -567,6 +569,8 @@ function Dashboard() {
       </>
     );
   }
+  
+
   return (
     <AppLayout
       filterNodes={
@@ -585,13 +589,14 @@ function Dashboard() {
               }}
               name={"Account-menu"}
             />}
+            
           <FilterItem
             minWidth="220px"
             label="Month"
             value={selMonth}
-            options={monthList.map((month) => ({
-              label: month.name,
-              value: month.value,
+            options={monthList?.map((month) => ({
+              label: month?.name,
+              value: month?.value,
             }))}
             onChange={(value) => {
               changeMonthHandler(value);

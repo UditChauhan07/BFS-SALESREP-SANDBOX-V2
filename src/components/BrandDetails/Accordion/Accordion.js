@@ -27,7 +27,7 @@ const Accordion = ({
     isCategoryCarted,deleteCartForever
   } = useCart();
   const [replaceCartModalOpen, setReplaceCartModalOpen] = useState(false);
-  // console.log(productCartSchema)
+  
   const [replaceCartProduct, setReplaceCartProduct] = useState({});
   const [showName, setShowName] = useState(false);
   const [productDetailId, setProductDetailId] = useState(null);
@@ -90,7 +90,7 @@ const Accordion = ({
     if (!quantity) {
       quantity = element.Min_Order_QTY__c;
     }
-    console.log({element});
+    // console.log({element});
     
     let checkProduct = isProductCarted(element.Id);
 
@@ -134,7 +134,7 @@ const Accordion = ({
     let salesPrice = (+listPrice - ((discount || 0) / 100) * +listPrice).toFixed(2);
     element.price = salesPrice;
     element.qty = quantity;
-    console.log({order});
+    // console.log({order});
 
     addOrder(element, account, manufacturer);
   };
@@ -157,7 +157,7 @@ const Accordion = ({
   };
 
   const sendProductIdHandler = ({ productId, productName }) => {
-    // navigate('/product/'+productName.replaceAll(" ","-").replaceAll("=","-"), { state: { productId } });
+  
     setProductDetailId(productId);
   };
   return (

@@ -105,10 +105,16 @@ const TopNav = () => {
             </div>
           
             <div className="d-flex justify-content-center align-items-center gap-3">
-              {userName&&<p className={`m-0 ${styles.welcomeText}`}>
-                Welcome,
-                <span className={`m-0 ${styles.nameText}`}>{userName}</span>
-              </p>}
+            {userName && (
+  <p className={`m-0 ${styles.welcomeText}`}>
+    Welcome, 
+    <span className={`m-0 ${styles.nameText}`}>
+      {userName.split(" ").length > 20 
+        ? userName.split(" ").slice(0, 20).join(" ") + "..."
+        : userName}
+    </span>
+  </p>
+)}
               <div className={styles.vr}></div>
               <p className={`m-0 ${styles.nameText}`}>
                 <Link to="/order-list" className="linkStyle">

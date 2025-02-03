@@ -487,7 +487,7 @@ export async function getOrderProduct({ rawData }) {
 }
 
 export async function cartSync({ cart }) {
-  console.warn("Cart size:", JSON.stringify(cart).length);
+  // console.warn("Cart size:", JSON.stringify(cart).length);
 
   let headersList = {
     Accept: "*/*",

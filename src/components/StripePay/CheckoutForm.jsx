@@ -17,6 +17,7 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes, setIsDisab
     const [cardErrors, setCardErrors] = useState({});
     const { order, deleteOrder , deleteCartForever } = useCart();
     const [orderDesc, setOrderDesc] = useState(null);
+
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const handleCardInput = (event) => {
         const { error, elementType } = event;
@@ -150,6 +151,7 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes, setIsDisab
                                 "OpportunityId",
                                 JSON.stringify(response.orderId)
                             );
+                            localStorage.removeItem("AA0KfX2OoNJvz7x")
                             setPaymentSuccess(true);
                             Swal.fire({
                                 title: 'Payment Successful!',
@@ -164,9 +166,9 @@ const CheckoutForm = ({ amount, clientSecretkKey, PONumber, orderDes, setIsDisab
                                 deleteOrder();
                                 deleteCartForever()
                                  
-                                setTimeout(()=>{
-                                    window.location.href = window.location.origin + '/orderDetails';
-                                },[800])
+                                // setTimeout(()=>{
+                                   navigate('/orderDetails')
+                                // },[600])
                                
                             });
                         }

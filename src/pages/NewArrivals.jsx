@@ -56,7 +56,7 @@ const NewArrivals = () => {
         setBrand(resManu);
 
         dataStore.getPageData("/marketing-calendar" + JSON.stringify(selectYear), () => getMarketingCalendar({ key: user.data.x_access_token, year: selectYear,accountIds: JSON.stringify(user.data.accountIds) })).then((productRes) => {
-          console.log({productRes});
+          // console.log({productRes});
           
           handleNewArrivalReady(productRes)
         }).catch((err) => console.log({ err }))
@@ -201,7 +201,7 @@ const NewArrivals = () => {
           : null}
         
           <FilterItem
-            minWidth="220px"
+            minWidth="100px"
             label="JAN-DEC"
             name="JAN-DEC"
             value={month}

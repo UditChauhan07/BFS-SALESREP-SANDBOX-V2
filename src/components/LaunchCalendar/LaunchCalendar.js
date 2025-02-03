@@ -100,11 +100,30 @@ function LaunchCalendar({ productList, selectBrand, brand, month }) {
         />
     );
 };
-const checkAllContentEmpty = (filteredData) => {
-  return filteredData?.every(month => month.content.length === 0);
-}
+const filteredData = useMemo(() => {
+  return productList?.map((months) => {
+    const filteredContent = months.content?.filter((item) => {
+      const shipDateParts = item.Ship_Date__c.split("-");
+      const shipMonth = parseInt(shipDateParts[1]) - 1; // Get month index (0-11)
+      const shipDay = parseInt(shipDateParts[2]);
+      const monthName = monthNames[shipMonth].toLowerCase();
 
-const resultOfFilter = checkAllContentEmpty(filterData);
+      // Check if the month matches
+      const monthMatches = month ? monthName === month.toLowerCase() : true;
+
+      // Check if the brand matches
+      const brandMatches = brand ? brand === item.ManufacturerId__c : true;
+
+      // Return true if both month and brand match
+      return monthMatches && brandMatches;
+    });
+
+    // Create a new object with filtered content
+    return { ...months, content: filteredContent };
+  });
+}, [productList, month, brand]); // Dependencies for useMemo
+
+const allOrdersEmpty = filterData?.every((item) => item.content.length <= 0);
 
   return (
     <div id="Calendar">
@@ -113,7 +132,7 @@ const resultOfFilter = checkAllContentEmpty(filterData);
         <div className="row">
           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 ">
             <ul className="timeline mt-4 mr-4" id="CalenerContainer">
-              {!resultOfFilter ? (
+              {!allOrdersEmpty  ? (
                 filterData?.map((month, index) => {
                   if (month.content.length) {
                     return (

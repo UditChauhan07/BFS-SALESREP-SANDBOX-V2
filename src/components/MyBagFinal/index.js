@@ -101,7 +101,7 @@ function MyBagFinal() {
   }, [order, buttonActive]);
 
   let data = localStorage.getItem("Api Data")
-  console.log(data.email)
+
   
   const editValue = localStorage.getItem("isEditaAble")
   useEffect(() => {
@@ -182,7 +182,7 @@ function MyBagFinal() {
           Id: id,
           AccountId: AccountID,
         }).then(async (brandRes) => {
-          console.log({ brandRes });
+          // console.log({ brandRes });
 
           setIntentRes(brandRes);
         
@@ -194,7 +194,7 @@ function MyBagFinal() {
           // Check for null keys
           if (!brandRes?.brandDetails.Stripe_Secret_key_test__c || !brandRes?.brandDetails.Stripe_Publishable_key_test__c) {
             setIsPlayAble(0);
-            console.log("Brand payment details are missing, skipping payment processing.");
+            // console.log("Brand payment details are missing, skipping payment processing.");
             return {
               PK_KEY: null,
               SK_KEY: null,
@@ -213,7 +213,7 @@ function MyBagFinal() {
             setIsPlayAble(1);
           } else if (paymentIntent === 400 || paymentDetails.PK_KEY !== paymentDetails.SK_KEY) {
             setIsPlayAble(0);
-            console.log(isPlayAble, "is play able ");
+            // console.log(isPlayAble, "is play able ");
           }
 
           setPaymentDetails({

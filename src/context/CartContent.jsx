@@ -118,7 +118,7 @@ const CartProvider = ({ children }) => {
             localStorage.setItem(orderCartKey, JSON.stringify(order));
             const user = await GetAuthData();
             if (!order.CreatedBy) {
-                order.CreatedBy = user.data.retailerId;
+                order.CreatedBy = user?.data.retailerId;
             }
 
             order.CreatedAt = order.CreatedAt || new Date();

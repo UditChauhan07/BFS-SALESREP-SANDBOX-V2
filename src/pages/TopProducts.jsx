@@ -94,7 +94,7 @@ const TopProducts = () => {
       dataStore.getPageData(`/top-products${JSON.stringify({ month: selectedMonth, manufacturerId: manufacturerFilter })}`, () => topProduct(value)).then((products) => {
         topProductReady(products)
       }).catch((err) => {
-        console.log({ aaa: err });
+        // console.log({ aaa: err });
       })
     }).catch((error) => {
       console.log({ error });
@@ -190,7 +190,7 @@ const TopProducts = () => {
    
       <FilterItem
         label="Month"
-        minWidth="220px"
+        minWidth="140px"
         name="Month"
         value={selectedMonth}
         options={monthList}
