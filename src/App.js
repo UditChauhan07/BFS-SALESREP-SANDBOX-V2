@@ -76,11 +76,8 @@ function App() {
               <Route path="/linkdin" element={<Linkdin />}></Route>
               <Route path="/Help-Section" element={<HelpSection />}></Route>
               <Route path="/sign-up" element={<SignUp />}></Route>
-              {/* <Route path="/orderStatusForm" element={<OrderStatusForm />}></Route> */}
               <Route path="/orderStatus" element={<OrderStatusIssues />} />
-              <Route path="/customerService" element={<CustomerService />}></Route>
-              {/* <Route path="/needHelp" element={<PortalHelp />}></Route> */}
-              {/* <Route path="/Target-Report" element={<TargetReport />}></Route> */}
+              <Route path="/customerService" element={<CustomerService />}></Route>             
               <Route path="/purchase-report" element={<SalesReport />}></Route>
               <Route path="/comparison-report" element={<ComparisonReport />}></Route>
               <Route path="/Target-Report" element={<TargetRollOver />}></Route>

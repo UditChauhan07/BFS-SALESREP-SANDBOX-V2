@@ -129,7 +129,7 @@ function FullQuearyDetail({ data, setRest, attachmentUrls=[] }) {
         comment: {
           ParentId: data.Id,
           CommentBody: `${
-            userData.firstName + " " + userData.lastName
+            (userData?.firstName || "") + " " + (userData?.lastName || "")
           } Wrote: \n${comment}`,
         },
       };
@@ -267,9 +267,7 @@ function FullQuearyDetail({ data, setRest, attachmentUrls=[] }) {
                             </div>
                             <div className={Detail.ActivityDate}>
                               <p>
-                                {itemDate.getDate()}/
-                                {monthNames[itemDate.getMonth()]}/
-                                {itemDate.getFullYear()} {formatAMPM(itemDate)}
+                                {itemDate.getDate()} {monthNames[itemDate.getMonth()]} {itemDate.getFullYear()} <br />{formatAMPM(itemDate)}
                               </p>
                             </div>
                           </div>

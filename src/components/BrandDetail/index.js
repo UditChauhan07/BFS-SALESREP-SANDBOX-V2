@@ -157,15 +157,16 @@ const BrandDetailCard = ({ brandId }) => {
                                                     Shop The Collection
                                                 </Link>
                                                 <div className="fitContent" onClick={() => setProductId(item.Id)}>
-                                                    {productImages?.isLoaded ? (
+                                                {item.ProductImage ? (
                                                         <img className="zoomInEffect"
                                                             style={{ maxHeight: '320px', width: 'auto', margin: '10px auto' }}
                                                             src={item.ProductImage ? item.ProductImage : productImages?.images?.[item.ProductCode]?.ContentDownloadUrl ?? "\\assets\\images\\dummy.png"}
                                                         />
                                                     ) : (
-                                                        <div className="d-grid place-content-center" style={{ height: '300px', margin: 'auto' }}>
-                                                            <LoaderV2 mods={{ height: '150px', width: '150px' }} />
-                                                        </div>
+                                                        <img className="zoomInEffect"
+                                                            style={{ maxHeight: '320px', width: 'auto', margin: '10px auto' }}
+                                                            src={item.ProductImage ? item.ProductImage : productImages?.images?.[item.ProductCode]?.ContentDownloadUrl ?? "\\assets\\images\\dummy.png"}
+                                                        />
                                                     )}
                                                 </div>
                                             </div>

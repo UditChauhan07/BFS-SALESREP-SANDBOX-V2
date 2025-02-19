@@ -63,7 +63,7 @@ const TopNav = () => {
                   {/* </a> */}
                   <ul className="dropdown-menu">
                   <li onClick={() => navigate("/orderStatus")}>
-                      <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                      <Link to="/order-list" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText} focus:!bg-black active:!bg-black focus:!text-white active:!text-white`}>
                         <OrderStatusIcon width={15} height={15}/>&nbsp;Order Status
                       </Link>
                     </li>
@@ -73,7 +73,7 @@ const TopNav = () => {
                         navigate("/customerService")
                       }}
                     >
-                      <Link to="/customerService" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                      <Link to="/customerService" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText} focus:!bg-black active:!bg-black focus:!text-white active:!text-white` }>
                        <CustomerServiceIcon width={15} height={15}/>&nbsp;Customer Services
                       </Link>
                     </li>
@@ -93,7 +93,7 @@ const TopNav = () => {
                         navigate("/Help-Section")
                       }}
                     >
-                      <Link to="/Help-Section" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText}`}>
+                      <Link to="/Help-Section" className={`dropdown-item text-start d-flex align-items-center ${styles.nameText} focus:!bg-black active:!bg-black focus:!text-white active:!text-white`}>
                        <RiGuideLine  width={15} height={15}/>&nbsp;How-To Guides
                       </Link>
                     </li>

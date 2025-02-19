@@ -84,7 +84,7 @@ const MarketingCalendar = () => {
     return () => {
       dataStore.subscribe(location.pathname + JSON.stringify(selectYear), (data) => { setProductList(data?.list); setIsloaed(true); });
     }
-  }, [selectBrand, selectYear, month, isLoaded])
+  }, [ selectYear])
 
   useBackgroundUpdater(handlePageData,defaultLoadTime)
 
@@ -425,7 +425,7 @@ const MarketingCalendar = () => {
           </div>
         }
         onClose={() => setIsAlert(false)} />
-      {isPDFLoaded ? <LoaderV3 text={"Generating Pdf Please wait..."} /> :
+      {isPDFLoaded ?<div><img src="https://i.giphy.com/7jtU9sxHNLZuv8HZCa.webp" style={{ margin: 'auto', mixBlendMode: 'luminosity' }} width="480" height="480" /><p className="text-center mt-2">{`Generating PDF`}</p></div> :
         isLoaded ? <LaunchCalendar brand={brand} selectBrand={selectBrand} month={month} productList={productList} /> : <LoaderV3 text={`Loading Upcoming New Product for ${selectBrand ?? "All Brands"}`} />}
 
 
