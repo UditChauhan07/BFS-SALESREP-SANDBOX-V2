@@ -146,51 +146,58 @@ export async function FreeShipHandler({ brandId }) {
 export async function POGenerator({ orderDetails }) {
 
   try {
+
     if (orderDetails.Manufacturer?.id && orderDetails.Account?.id) {
+      let user = await GetAuthData();
+      let key = user?.data?.x_access_token || null;
+      if (key) {
+        let date = new Date();
+        const sanitizeString = (str) =>
+          str
+            .replace(/[^a-zA-Z0-9 ]/g, "") // Remove special characters
+            .replace(/\s+/g, " ")          // Replace multiple spaces with a single space
+            .trim();
+        const sanitizedAccountName = sanitizeString(orderDetails.Account?.name || "");
+        const sanitizedManufacturerName = sanitizeString(orderDetails.Manufacturer?.name || "");
 
-      let date = new Date();
-      const sanitizeString = (str) =>
-        str
-          .replace(/[^a-zA-Z0-9 ]/g, "") // Remove special characters
-          .replace(/\s+/g, " ")          // Replace multiple spaces with a single space
-          .trim();
-      const sanitizedAccountName = sanitizeString(orderDetails.Account?.name || "");
-      const sanitizedManufacturerName = sanitizeString(orderDetails.Manufacturer?.name || "");
+        //  const response = await fetch( "http://localhost:2611/PoNumber/generatepo"
+        const response = await fetch(originAPi + "/qX8COmFYnyAj4e2/generatepov3", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
 
-      //  const response = await fetch( "http://localhost:2611/PoNumber/generatepo"
-      const response = await fetch(originAPi + "/qX8COmFYnyAj4e2/generatepov2", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+          body: JSON.stringify({
+            key,
+            accountName: sanitizedAccountName,
+            manufacturerName: sanitizedManufacturerName,
+            orderDate: date.toISOString(),
+            accountId: orderDetails.Account?.id,
+            manufacturerId: orderDetails.Manufacturer?.id
+          }),
+        });
 
-        body: JSON.stringify({
-          accountName: sanitizedAccountName,
-          manufacturerName: sanitizedManufacturerName,
-          orderDate: date.toISOString(),
-          accountId: orderDetails.Account?.id,
-          manufacturerId: orderDetails.Manufacturer?.id
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
 
-      const res = await response.json();
+        const res = await response.json();
 
-      if (res.success) {
-        let poNumber = res.poNumber;
-        let address = res.address;
-        let brandShipping = res?.brandShipping;
-        let shippingMethod = res?.shippingMethod;
-        let checkBrandAllow = res?.checkBrandAllow;
-        let freeShipping = res?.freeShipping;
+        if (res.success) {
+          let poNumber = res.poNumber;
+          let address = res.address;
+          let brandShipping = res?.brandShipping;
+          let shippingMethod = res?.shippingMethod;
+          let checkBrandAllow = res?.checkBrandAllow;
+          let freeShipping = res?.freeShipping;
 
-        return { poNumber, address, brandShipping, shippingMethod, checkBrandAllow, freeShipping };
+          return { poNumber, address, brandShipping, shippingMethod, checkBrandAllow, freeShipping };
+        } else {
+          console.error('Failed to generate PO number:', res.message);
+          return null;
+        }
       } else {
-        console.error('Failed to generate PO number:', res.message);
         return null;
       }
     } else {

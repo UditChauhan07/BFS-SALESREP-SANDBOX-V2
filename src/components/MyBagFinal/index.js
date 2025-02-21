@@ -195,7 +195,7 @@ function MyBagFinal() {
     return order?.ordertype == "wholesale"
   }, [order])
   const handleNameChange = (event) => {
-    const limit = 10;
+    const limit = 12;
     setLimitInput(event.target.value.slice(0, limit));
   };
   const fetchBrandPaymentDetails = async () => {
